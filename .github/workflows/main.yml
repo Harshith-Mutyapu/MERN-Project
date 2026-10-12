@@ -1,0 +1,35 @@
+name: Daily Streak
+
+on:
+  schedule:
+    - cron: "30 18 * * *"
+    workflow_dispatch:
+
+permissions:
+  contents: write
+
+ jobs:
+   daily_commit:
+     runs-on: ubuntu-latest
+
+     steps:
+     - name: Checkout
+       uses: actions/checkout@v4
+
+    - name: Update streak file
+    run: |
+      echo "Last Run: $(date)" >> streak.txt
+
+    - name: Commit
+      run: |
+        git config user.name "Harshith_Mutyapu"
+        git confit user.email "harsh.mutyapu@gmail.com"
+
+        git add streak.txt
+
+        git diff --staged --quite || \
+        git commit -m "Automated daily streak update"
+
+      - name: Push
+       run: |
+           git push
